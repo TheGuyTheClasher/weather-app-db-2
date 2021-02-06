@@ -11,6 +11,5 @@ app.listen(port, (err, success) => {
 })
 
 app.get('/name', (req, res) => {
-
+  console.log(res)
 });
-
