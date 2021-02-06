@@ -12,12 +12,12 @@ let port = process.env.PORT || 4000;
 
 
 
-app.get('/', cors(), (req, res) => {
-    request('http://api.openweathermap.org/data/2.5/weather?q=Pune&appid=1a519892f1765781dca5cbc681371375')
+app.get('/getweather', cors(), (req, res) => {
+    console.log(req.query);
+    request(`http://api.openweathermap.org/data/2.5/weather?q=${req.query.name}&appid=1a519892f1765781dca5cbc681371375`)
         .on('data', (chunk) => {
             let obj_data = JSON.parse(chunk);
-            let arr_data = [obj_data];
-            res.send(arr_data);
+            res.send(obj_data);
         })
         .on('end', (err) => {
             if (err) return console.log('connection closed due to errors', err);
