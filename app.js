@@ -2,18 +2,24 @@ const express = require('express');
 const cors = require('cors');
 var request = require('requests');
 
+const mail_service = require('./services/mail');
+
 const app = express();
 
 app.use(cors())
 
 let port = process.env.PORT || 4000;
 
+
+
+
+
 // let URI = 'api.openweathermap.org/data/2.5/weather?q=Pune&appid=1a519892f1765781dca5cbc681371375'
 
 app.get('/getweather', cors(), (req, res) => {
     console.log(req.query);
     try {
-        request(`http://api.openweathermap.org/data/2.5/weather?q=${req.query.name}&appid=1a519892f1765781dca5cbc681371375`)
+        request(`http://api.openweathermap.org/data/2.5/weather?q=${req.query.name}&units=metric&appid=1a519892f1765781dca5cbc681371375`)
             .on('data', (chunk) => {
                 let obj_data = JSON.parse(chunk);
 
@@ -24,7 +30,9 @@ app.get('/getweather', cors(), (req, res) => {
                         'weather_data': obj_data,
                         'message': "Weather data fetched successfully!!!"
                     }
+                    mail_service.sendMail(obj_data);
                     res.send(output_obj);
+
                 } else {
                     let output_obj = {
                         'status': 'failure',
